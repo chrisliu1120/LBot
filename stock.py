@@ -1,12 +1,20 @@
 import time
 import requests
+import json
 '''
 這是一個股票檔案
 '''
 # 查詢股價進入點
 def stockprice(stock_codes):
-    codeno = f'tse_{stock_codes}.tw'
-    timestamp = int(time.time() * 1000)
+    with open('TSEno.json', encoding='utf-8') as f: #把env檔讀進來
+        global TSEno
+        TSEno = json.load(f)
+
+    if stock_codes in TSEno:
+        codeno = f'tse_{stock_codes}.tw'
+    else:
+        codeno = f'otc_{stock_codes}.tw'
+    #timestamp = int(time.time() * 1000)
     api_url = f"https://mis.twse.com.tw/stock/api/getStockInfo.jsp?json=1&ex_ch={codeno}"
     rate = requests.get(api_url)
     req = rate.json()
