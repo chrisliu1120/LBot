@@ -88,8 +88,8 @@ def handle_message(event):
     user_id = event.source.user_id
     # 提取 text(使用者輸入的股票代號)
     stock_codes = event.message.text
-
-    if stock_codes == 'q':
+    q = ['Q', 'q']
+    if stock_codes in q:
         text = '下面是你常查詢的四檔股票'
         reply = replyitem(user_id)
         items = []                        #創建一個空list
