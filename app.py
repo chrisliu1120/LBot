@@ -40,6 +40,9 @@ with open('env.json', encoding='utf-8') as f: #把env檔讀進來
 with open('TSEno.json', encoding='utf-8') as f: #把上市代碼檔讀進來
     TSEno = json.load(f)
 
+with open('OTCno.json', encoding='utf-8') as f: #把上市代碼檔讀進來
+    OTCno = json.load(f)
+
 # 初始化 Firestore 資料庫客戶端
 firestore_client = firestore.Client.from_service_account_json('stockapi.json')
 # 指定 Firestore 中的 'stockDB' 集合 (Collection)
@@ -100,7 +103,7 @@ def handle_message(event):
 
     # 執行查詢股價函式&紀錄查詢次數
     else:
-        if stock_codes in TSEno :
+        if stock_codes in TSEno or OTCno:
             checktime(stock_codes, user_id)  #紀錄股票查詢計次的函式
         retext = stockprice(stock_codes)
         messages.append(TextMessage(text=retext))
