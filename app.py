@@ -38,9 +38,11 @@ with open('env.json', encoding='utf-8') as f: #把env檔讀進來
     env = json.load(f)
 
 with open('TSEno.json', encoding='utf-8') as f: #把上市代碼檔讀進來
+    global TSEno
     TSEno = json.load(f)
 
 with open('OTCno.json', encoding='utf-8') as f: #把上市代碼檔讀進來
+    global OTCno
     OTCno = json.load(f)
 
 # 初始化 Firestore 資料庫客戶端
@@ -48,6 +50,9 @@ firestore_client = firestore.Client.from_service_account_json('stockapi.json')
 # 指定 Firestore 中的 'stockDB' 集合 (Collection)
 collection = firestore_client.collection('stockDB')
 
+
+#合併股票代碼
+all_stock = {**TSEno, **OTCno}
 
 
 
@@ -103,7 +108,8 @@ def handle_message(event):
 
     # 執行查詢股價函式&紀錄查詢次數
     else:
-        if stock_codes in TSEno or OTCno:
+        if stock_codes in all_stock:
+            print(TSEno[stock_codes])
             checktime(stock_codes, user_id)  #紀錄股票查詢計次的函式
         retext = stockprice(stock_codes)
         messages.append(TextMessage(text=retext))
